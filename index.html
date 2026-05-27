@@ -1,216 +1,392 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
-<title>酸種麵包配方計算表｜終極手機優化版</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, viewport-fit=cover">
+<title>酸種烘焙大師計算器｜饅頭與麵包雙系統</title>
 <style>
 :root {
-  --bg: #f4f9f8;
+  --bg: linear-gradient(135deg, #e4f5f3, #eaf4fa);
   --card: #ffffff;
-  --ink: #1e2d2d;
-  --muted: #647c7a;
-  --line: #dbeae7;
+  --ink: #1c3d44;
+  --muted: #597a81;
+  --line: #d1e8e6;
   --main: #257a76;
   --main-light: #e6f4f2;
+  --accent: #3b6b99;
+  --accent-light: #edf5fc;
   --warn: #c35126;
   --ok: #1b6351;
-  --shadow: 0 4px 14px rgba(37,122,118,0.06);
+  --shadow: 0 6px 20px rgba(37,122,118,0.08);
 }
 * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 body {
   margin: 0;
+  padding: 12px;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans TC", "Microsoft JhengHei", Arial, sans-serif;
   background: var(--bg);
   color: var(--ink);
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans TC", sans-serif;
   line-height: 1.5;
-  padding-bottom: 120px; /* 留空間給底部固定看板 */
+  padding-bottom: 120px; /* 留空間給麵包系統的底部固定看板 */
 }
-.wrap { max-width: 600px; margin: auto; padding: 12px 12px 40px; }
-header { text-align: center; padding: 16px 8px; }
-h1 { font-size: 22px; margin: 0 0 6px; color: var(--main); font-weight: 800; }
-h2 { font-size: 17px; margin: 0 0 12px; display: flex; align-items: center; gap: 6px; color: var(--main); }
-h2::before { content: "◆"; font-size: 12px; color: var(--main); }
-.note { color: var(--muted); font-size: 13px; line-height: 1.4; margin: 4px 0; }
+.container { max-width: 580px; margin: 0 auto; }
+header { text-align: center; padding: 8px 8px 12px; }
+h1 { margin: 4px 0 6px; color: var(--main); font-size: 24px; font-weight: 800; }
+.subtitle { color: var(--muted); font-size: 13px; text-align: center; line-height: 1.5; margin-bottom: 12px; }
 
+/* 頂部大系統切換頁籤 */
+.system-tabs { display: flex; background: rgba(37, 122, 118, 0.15); padding: 6px; border-radius: 16px; margin-bottom: 16px; border: 1px solid var(--line); }
+.sys-tab-btn { flex: 1; border: 0; background: transparent; color: var(--main); padding: 12px; font-size: 16px; font-weight: bold; border-radius: 12px; cursor: pointer; transition: all 0.2s ease; }
+.sys-tab-btn.active { background: var(--main); color: #fff; box-shadow: 0 4px 12px rgba(37,122,118,0.25); }
+
+/* 主系統顯示控制 */
+.system-content { display: none; }
+.system-content.active { display: block; }
+
+/* 卡片與通用元件 */
 .card {
   background: var(--card);
   border: 1px solid var(--line);
-  border-radius: 16px;
-  box-shadow: var(--shadow);
-  margin-bottom: 14px;
+  border-radius: 20px;
   padding: 16px;
+  margin-bottom: 14px;
+  box-shadow: var(--shadow);
 }
+h2, .title { font-size: 16px; font-weight: 800; color: var(--main); margin: 6px 0 12px; display: flex; align-items: center; gap: 6px; }
+h2::before, .title::before { content: "◆"; font-size: 11px; color: var(--main); }
 
-/* 表單與欄位 */
-.field { margin-bottom: 12px; }
-.field label { display: block; font-size: 13px; color: var(--muted); margin-bottom: 6px; font-weight: 500; }
-select, input {
-  width: 100%;
-  height: 46px;
-  border: 1px solid var(--line);
-  border-radius: 10px;
-  background: #fff;
-  color: var(--ink);
-  font-size: 16px;
-  padding: 8px 12px;
-  text-align: center;
-}
-select { text-align-last: center; font-weight: bold; border-color: var(--main); background-color: var(--main-light); }
-input:focus, select:focus { outline: 3px solid var(--main-light); border-color: var(--main); }
+label { display: block; margin-bottom: 8px; font-weight: 800; color: var(--main); font-size: 15px; text-align: center; }
+
+/* 步進微調器 */
+.stepper { display: flex; align-items: center; border: 2px solid var(--main); border-radius: 12px; overflow: hidden; background: #fff; margin-bottom: 12px; }
+.stepper button { width: 52px; height: 46px; background: var(--main-light); color: var(--main); font-size: 22px; border: 0; font-weight: bold; cursor: pointer; }
+.stepper button:active { background: var(--line); }
+.stepper input { flex: 1; height: 46px; border: 0; text-align: center; font-size: 20px; font-weight: 800; color: var(--ink); background: transparent; width: 100%; }
+.stepper input:focus { outline: none; }
 input::-webkit-inner-spin-button, input::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
 
-/* 頂部/功能按鈕 */
-.btn-group { display: flex; gap: 8px; margin-top: 10px; }
-button {
-  flex: 1;
-  border: 0;
-  border-radius: 10px;
-  background: var(--main);
-  color: #fff;
-  font-weight: bold;
-  font-size: 15px;
-  height: 44px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-}
-button.secondary { background: var(--muted); }
+.btn-clear { width: 100%; border: 0; background: var(--muted); color: #fff; padding: 10px; border-radius: 10px; font-size: 14px; font-weight: bold; margin-bottom: 4px; cursor: pointer; }
 
-/* 精簡看板 */
+/* 麵包專用小步進器 */
+.item-inputs .stepper { border: 1px solid var(--line); border-radius: 8px; margin-bottom: 0; }
+.item-inputs .stepper button { width: 34px; height: 38px; font-size: 18px; font-weight: normal; }
+.item-inputs .stepper input { height: 38px; font-size: 15px; }
+
+/* 數據展示條 */
+.box-list { display: flex; flex-direction: column; gap: 8px; }
+.box-row { display: flex; justify-content: space-between; align-items: center; padding: 12px 14px; background: #fafdfd; border: 1px solid var(--line); border-radius: 12px; }
+.box-row .name { color: var(--muted); font-size: 14px; font-weight: 500; }
+.box-row .value { color: var(--ink); font-size: 17px; font-weight: 800; }
+
+/* 饅頭即時大看板 */
+.main-result-box {
+  background: linear-gradient(135deg, #d2f0ec, #e2f0fd);
+  border-radius: 16px;
+  padding: 16px;
+  text-align: center;
+  font-size: 20px;
+  font-weight: 900;
+  color: var(--main);
+  margin-top: 8px;
+}
+
+/* 內部分頁頁籤 (糖量) */
+.tabs { display: flex; background: var(--main-light); padding: 4px; border-radius: 12px; margin-bottom: 12px; }
+.tab-btn { flex: 1; border: 0; background: transparent; color: var(--main); padding: 10px; font-size: 14px; font-weight: bold; border-radius: 8px; cursor: pointer; }
+.tab-btn.active { background: var(--main); color: #fff; box-shadow: 0 3px 8px rgba(37,122,118,0.2); }
+.tab-content { display: none; }
+.tab-content.active { display: flex; flex-direction: column; gap: 8px; }
+
+/* 麵包專用欄位與格線 */
+.field { margin-bottom: 12px; }
+.field label { display: block; font-size: 13px; color: var(--muted); margin-bottom: 6px; font-weight: 500; text-align: left; }
+select { width: 100%; height: 46px; border: 2px solid var(--main); border-radius: 12px; background: var(--main-light); color: var(--main); font-size: 16px; padding: 8px 12px; font-weight: bold; text-align-last: center; cursor: pointer; }
+select:focus { outline: none; }
+
+.btn-group { display: flex; gap: 8px; margin-top: 10px; }
+.btn-group button { flex: 1; border: 0; border-radius: 10px; background: var(--main); color: #fff; font-weight: bold; font-size: 15px; height: 44px; cursor: pointer; }
+.btn-group button.secondary { background: var(--muted); }
+
 .summary-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; margin-bottom: 8px; }
 .metric { border: 1px solid var(--line); border-radius: 10px; background: #fff; padding: 10px; text-align: center; }
 .metric .k { font-size: 12px; color: var(--muted); margin-bottom: 2px; }
 .metric .v { font-weight: 800; font-size: 18px; color: var(--ok); }
 
-/* 手機版條狀清單 (取代傳統Table) */
-.item-row {
-  background: #fff;
-  border: 1px solid var(--line);
-  border-radius: 12px;
-  padding: 12px;
-  margin-bottom: 8px;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
+/* 麵包手機版條狀清單 */
+.item-row { background: #fff; border: 1px solid var(--line); border-radius: 12px; padding: 12px; margin-bottom: 8px; display: flex; flex-direction: column; gap: 8px; }
 .item-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px dashed var(--line); padding-bottom: 6px; }
 .item-name { font-weight: bold; font-size: 15px; color: var(--ink); }
 .item-inputs { display: flex; gap: 10px; }
 .input-block { flex: 1; display: flex; flex-direction: column; gap: 4px; }
 .input-block span { font-size: 11px; color: var(--muted); text-align: center; }
 
-/* 步進微調按鈕控制項 */
-.stepper { display: flex; align-items: center; border: 1px solid var(--line); border-radius: 8px; overflow: hidden; background: #fff; }
-.stepper button { width: 32px; height: 36px; background: var(--main-light); color: var(--main); font-size: 18px; border-radius: 0; font-weight: normal; }
-.stepper button:active { background: var(--line); }
-.stepper input { flex: 1; height: 36px; border: 0; padding: 0; font-size: 15px; font-weight: bold; }
-
 /* 底部固定看板 */
-.sticky-bar {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  background: rgba(255, 255, 255, 0.96);
-  border-top: 1px solid var(--line);
-  padding: 10px 14px cubic-bezier(0.1, 0.7, 0.1, 1);
-  box-shadow: 0 -4px 20px rgba(0,0,0,0.07);
-  backdrop-filter: blur(10px);
-  z-index: 999;
-}
-.sticky-content { max-width: 600px; margin: auto; font-size: 13px; font-weight: 500; text-align: center; }
+.sticky-bar { position: fixed; bottom: 0; left: 0; right: 0; background: rgba(255, 255, 255, 0.96); border-top: 1px solid var(--line); padding: 12px 14px; box-shadow: 0 -4px 20px rgba(0,0,0,0.07); backdrop-filter: blur(10px); z-index: 999; display: none; }
+.sticky-content { max-width: 580px; margin: auto; font-size: 14px; font-weight: 500; text-align: center; }
 
+.note { font-size: 12px; color: var(--muted); line-height: 1.6; }
+.note strong { color: var(--main); }
 .ok { color: var(--ok); font-weight: bold; }
 .warn { color: var(--warn); font-weight: bold; }
 </style>
 </head>
-<body>
 
-<div class="wrap">
+<body>
+<div class="container">
   <header>
-    <h1>酸種麵包配方計算表</h1>
-    <div class="note">手機友善版 📱 免打字 · 點擊 ± 可微調克數或比例</div>
+    <h1>酸種烘焙大師計算器</h1>
+    <div class="note">免打字 · 點擊 ± 即可微調克數或比例 📱</div>
   </header>
 
-  <section class="card">
-    <h2>製作設定</h2>
-    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
-      <div class="field">
-        <label>製作顆數</label>
-        <div class="stepper">
-          <button type="button" onclick="stepId('pieces', -1)">-</button>
-          <input id="pieces" type="number" inputmode="decimal" value="4" min="1" step="1" oninput="calculate()">
-          <button type="button" onclick="stepId('pieces', 1)">+</button>
-        </div>
-      </div>
-      <div class="field">
-        <label>每顆麵團重 (g)</label>
-        <div class="stepper">
-          <button type="button" onclick="stepId('pieceWeight', -10)">-</button>
-          <input id="pieceWeight" type="number" inputmode="decimal" value="400" min="1" step="5" oninput="calculate()">
-          <button type="button" onclick="stepId('pieceWeight', 10)">+</button>
-        </div>
-      </div>
+  <nav class="system-tabs">
+    <button type="button" class="sys-tab-btn active" onclick="switchSystem('mantou')">饅頭補粉計算</button>
+    <button type="button" class="sys-tab-btn" onclick="switchSystem('bread')">麵包配方計算</button>
+  </nav>
+
+  <main id="systemMantou" class="system-content active">
+    <div class="subtitle">
+      固定比例：水 1：粉 1.2 ｜ 目標含水量：50%<br>
+      無油版本（適用酸種、老麵饅頭）
     </div>
-    <div class="field">
-      <label>預水合水量 (%)</label>
+
+    <section class="card">
+      <label for="starterInput">輸入現有酵種重量 (g)</label>
       <div class="stepper">
-        <button type="button" onclick="stepWater(-0.5)">-</button>
-        <input id="waterPct" type="number" inputmode="decimal" value="62.5" min="0" step="0.1" oninput="editBasePct(0,this.value)">
-        <button type="button" onclick="stepWater(0.5)">+</button>
+        <button type="button" onclick="stepStarter(-10)">-10</button>
+        <button type="button" onclick="stepStarter(-1)">-1</button>
+        <input id="starterInput" type="number" inputmode="decimal" step="0.1" min="0" placeholder="0.0" oninput="calculateMantou()">
+        <button type="button" onclick="stepStarter(1)">+1</button>
+        <button type="button" onclick="stepStarter(10)">+10</button>
       </div>
-    </div>
-    <div class="btn-group">
-      <button type="button" onclick="forceCalculate()">重新計算</button>
-      <button type="button" class="secondary" onclick="resetAll()">恢復預設</button>
-    </div>
-  </section>
+      <button type="button" class="btn-clear" onclick="clearResultsMantou()">清除數據</button>
 
-  <section class="card">
-    <h2>數據總覽</h2>
-    <div class="summary-grid">
-      <div class="metric"><div class="k">最後總重</div><div class="v" id="targetDough">—</div></div>
-      <div class="metric"><div class="k">麵粉總量</div><div class="v" id="totalFlour">—</div></div>
-      <div class="metric"><div class="k">預水合水重</div><div class="v" id="waterGram">—</div></div>
-      <div class="metric"><div class="k">投料總重</div><div class="v" id="addonTotal">—</div></div>
-    </div>
-  </section>
+      <div class="main-result-box" id="mainResult">請增減或輸入酵種重量</div>
+    </section>
 
-  <section class="card">
-    <h2>三、麵粉比例 (合計固定 100%)</h2>
-    <div id="flourCheck" class="note" style="margin-bottom: 10px;"></div>
-    <div id="flourList"></div>
-  </section>
+    <section class="card">
+      <div class="title">一、基礎材料拆解換算</div>
+      <div class="box-list">
+        <div class="box-row"><span class="name">酵種內含水量</span><span class="value" id="water">—</span></div>
+        <div class="box-row"><span class="name">酵種內含粉量</span><span class="value" id="starterFlour">—</span></div>
+        <div class="box-row" style="background: var(--main-light); border-color: var(--main);"><span class="name" style="color: var(--main); font-weight: bold;">需補中筋麵粉</span><span class="value" id="addFlour" style="color: var(--main); font-size: 19px;">—</span></div>
+        <div class="box-row"><span class="name">最後總粉量</span><span class="value" id="totalFlourMantou">—</span></div>
+        <div class="box-row"><span class="name">建議速發酵母 (1%)</span><span class="value" id="yeast">—</span></div>
+      </div>
+    </section>
 
-  <section class="card">
-    <h2>四、基礎材料</h2>
-    <div id="baseList"></div>
-  </section>
+    <section class="card">
+      <div class="title">二、風味、總重與熱量</div>
+      <div class="tabs">
+        <button type="button" class="tab-btn active" onclick="switchSugarTab(this, 'tab5')">微甜風味 (糖 5%)</button>
+        <button type="button" class="tab-btn" onclick="switchSugarTab(this, 'tab10')">甜口風味 (糖 10%)</button>
+      </div>
 
-  <section class="card">
-    <h2>五、口味投料控制</h2>
-    <div class="field">
-      <label>選擇麵包口味</label>
-      <select id="flavor" onchange="changeFlavor(this.value)">
-        <option value="original">原味麵包</option>
-        <option value="chiliCheese">辣椒起司</option>
-        <option value="cocoaCranberry">可可蔓越莓</option>
-        <option value="multigrainSeeds">多穀物種子</option>
-      </select>
-    </div>
-    <p class="note" id="flavorNote" style="background: var(--bg); padding: 8px; border-radius: 8px;"></p>
-    <div id="addonEmpty" class="metric" style="display:none; background: var(--main-light);"><div class="v" style="font-size:15px;">原味，無額外投料</div></div>
-    <div id="addonList"></div>
-  </section>
+      <div id="tab5" class="tab-content active">
+        <div class="box-row"><span class="name">所需糖量 (5%)</span><span class="value" id="sugar5">—</span></div>
+        <div class="box-row"><span class="name">麵團預估總重</span><span class="value" id="dough5">—</span></div>
+        <div class="box-row"><span class="name">成品預估總熱量</span><span class="value" id="cal5">—</span></div>
+      </div>
+
+      <div id="tab10" class="tab-content">
+        <div class="box-row"><span class="name">所需糖量 (10%)</span><span class="value" id="sugar10">—</span></div>
+        <div class="box-row"><span class="name">麵團預估總重</span><span class="value" id="dough10">—</span></div>
+        <div class="box-row"><span class="name">成品預估總熱量</span><span class="value" id="cal10">—</span></div>
+      </div>
+    </section>
+
+    <section class="card note">
+      <strong>💡 計算公式備忘：</strong><br>
+      • 酵種比例：水 1 : 粉 1.2（總和 2.2）<br>
+      • 50% 含水量下：總粉量 = 內含水量 ÷ 0.5<br>
+      • 需補中粉 = 最後總粉量 - 酵種內粉量<br>
+      • 熱量估算基礎：麵粉 364 kcal/100g，砂糖 400 kcal/100g
+    </section>
+  </main>
+
+  <main id="systemBread" class="system-content">
+    <section class="card">
+      <h2>製作設定</h2>
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+        <div class="field">
+          <label>製作顆數</label>
+          <div class="stepper">
+            <button type="button" onclick="stepId('pieces', -1)">-</button>
+            <input id="pieces" type="number" inputmode="decimal" value="4" min="1" step="1" oninput="calculateBread()">
+            <button type="button" onclick="stepId('pieces', 1)">+</button>
+          </div>
+        </div>
+        <div class="field">
+          <label>每顆麵團重 (g)</label>
+          <div class="stepper">
+            <button type="button" onclick="stepId('pieceWeight', -10)">-</button>
+            <input id="pieceWeight" type="number" inputmode="decimal" value="400" min="1" step="5" oninput="calculateBread()">
+            <button type="button" onclick="stepId('pieceWeight', 10)">+</button>
+          </div>
+        </div>
+      </div>
+      <div class="field">
+        <label>預水合水量 (%)</label>
+        <div class="stepper">
+          <button type="button" onclick="stepWater(-0.5)">-</button>
+          <input id="waterPct" type="number" inputmode="decimal" value="62.5" min="0" step="0.1" oninput="editBasePct(0,this.value)">
+          <button type="button" onclick="stepWater(0.5)">+</button>
+        </div>
+      </div>
+      <div class="btn-group">
+        <button type="button" onclick="forceCalculateBread()">重新計算</button>
+        <button type="button" class="secondary" onclick="resetAllBread()">恢復預設</button>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>數據總覽</h2>
+      <div class="summary-grid">
+        <div class="metric"><div class="k">最後總重</div><div class="v" id="targetDough">—</div></div>
+        <div class="metric"><div class="k">麵粉總量</div><div class="v" id="totalFlourBread">—</div></div>
+        <div class="metric"><div class="k">預水合水重</div><div class="v" id="waterGram">—</div></div>
+        <div class="metric"><div class="k">投料總重</div><div class="v" id="addonTotal">—</div></div>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>三、麵粉比例 (合計固定 100%)</h2>
+      <div id="flourCheck" class="note" style="margin-bottom: 10px;"></div>
+      <div id="flourList"></div>
+    </section>
+
+    <section class="card">
+      <h2>四、基礎材料</h2>
+      <div id="baseList"></div>
+    </section>
+
+    <section class="card">
+      <h2>五、口味投料控制</h2>
+      <div class="field">
+        <label>選擇麵包口味</label>
+        <select id="flavor" onchange="changeFlavor(this.value)">
+          <option value="original">原味麵包</option>
+          <option value="chiliCheese">辣椒起司</option>
+          <option value="cocoaCranberry">可可蔓越莓</option>
+          <option value="multigrainSeeds">多穀物種子</option>
+        </select>
+      </div>
+      <p class="note" id="flavorNote" style="background: var(--bg); padding: 8px; border-radius: 8px;"></p>
+      <div id="addonEmpty" class="metric" style="display:none; background: var(--main-light);"><div class="v" style="font-size:15px;">原味，無額外投料</div></div>
+      <div id="addonList"></div>
+    </section>
+  </main>
 </div>
 
-<div class="sticky-bar">
+<div class="sticky-bar" id="breadStickyBar">
   <div class="sticky-content" id="checkLine">計算中...</div>
 </div>
 
 <script>
+// 通用工具
+function el(id){ return document.getElementById(id); }
+function gram(v){ return (Math.round(v * 10) / 10).toFixed(1) + " g"; }
+function kcal(v){ return Math.round(v) + " kcal"; }
+
+// 系統全域自動聚焦全選
+function attachFocusEvents() {
+  document.querySelectorAll('input[type="number"]').forEach(input => {
+    input.addEventListener('focus', function() { this.select(); });
+  });
+}
+
+// 主系統切換 (饅頭 / 麵包)
+function switchSystem(sysType) {
+  document.querySelectorAll('.sys-tab-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.system-content').forEach(c => c.classList.remove('active'));
+  
+  if(sysType === 'mantou') {
+    event.currentTarget.classList.add('active');
+    el('systemMantou').classList.add('active');
+    el('breadStickyBar').style.display = 'none';
+    document.body.style.paddingBottom = '30px'; // 恢復正常間距
+  } else {
+    event.currentTarget.classList.add('active');
+    el('systemBread').classList.add('active');
+    el('breadStickyBar').style.display = 'block';
+    document.body.style.paddingBottom = '120px'; // 留出底部看版空間
+    calculateBread();
+  }
+}
+
+// ==================== JS 邏輯：系統一 (饅頭) ====================
+function stepStarter(val) {
+  var input = el("starterInput");
+  var current = parseFloat(input.value) || 0;
+  var next = Math.max(0, current + val);
+  input.value = next === 0 ? "" : next;
+  calculateMantou();
+}
+
+function switchSugarTab(btn, tabId) {
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+  btn.classList.add('active');
+  el(tabId).classList.add('active');
+}
+
+function clearResultsMantou(){
+  var ids = [
+    "water","starterFlour","addFlour","totalFlourMantou","yeast",
+    "sugar5","sugar10","dough5","dough10","cal5","cal10"
+  ];
+  for(var i=0; i<ids.length; i++){ el(ids[i]).innerHTML = "—"; }
+  el("starterInput").value = "";
+  el("mainResult").innerHTML = "請增減或輸入酵種重量";
+}
+
+function calculateMantou(){
+  var raw = el("starterInput").value;
+  if(raw === null || raw === ""){
+    clearResultsMantou();
+    return;
+  }
+  raw = String(raw).replace(",", ".");
+  var starter = Number(raw);
+
+  if(isNaN(starter) || starter <= 0){
+    el("mainResult").innerHTML = "<span style='color: #c35126;'>請輸入大於 0 的數字</span>";
+    return;
+  }
+
+  var water = starter / 2.2;
+  var starterFlour = starter * 1.2 / 2.2;
+  var totalFlour = water / 0.5;
+  var addFlour = totalFlour - starterFlour;
+  var yeast = totalFlour * 0.01;
+
+  var sugar5 = totalFlour * 0.05;
+  var sugar10 = totalFlour * 0.10;
+
+  var dough5 = starter + addFlour + yeast + sugar5;
+  var dough10 = starter + addFlour + yeast + sugar10;
+
+  var flourCal = totalFlour * 3.64;
+  var cal5 = flourCal + sugar5 * 4;
+  var cal10 = flourCal + sugar10 * 4;
+
+  el("water").innerHTML = gram(water);
+  el("starterFlour").innerHTML = gram(starterFlour);
+  el("addFlour").innerHTML = gram(addFlour);
+  el("totalFlourMantou").innerHTML = gram(totalFlour);
+  el("yeast").innerHTML = gram(yeast);
+
+  el("sugar5").innerHTML = gram(sugar5);
+  el("sugar10").innerHTML = gram(sugar10);
+  el("dough5").innerHTML = gram(dough5);
+  el("dough10").innerHTML = gram(dough10);
+  el("cal5").innerHTML = kcal(cal5);
+  el("cal10").innerHTML = kcal(cal10);
+
+  el("mainResult").innerHTML = "需補中筋麵粉：約 " + gram(addFlour);
+}
+
+
+// ==================== JS 邏輯：系統二 (麵包) ====================
 var flourNames=['高筋麵粉','裸麥粉','法國麵粉'];
 var flourPct=[70,10,20];
 var base=[
@@ -239,36 +415,22 @@ var flavorMap={
  multigrainSeeds:{label:'多穀物種子',items:['黑芝麻','白芝麻','黃金亞麻子','南瓜子'],note:'帶出：黑芝麻、白芝麻、黃金亞麻子、南瓜子。'}
 };
 
-function activeAddons(){var names=flavorMap[flavor].items;return addons.filter(function(a){return names.indexOf(a.name)>=0})}
 var lock=false;
-function el(id){return document.getElementById(id)}
 function n(v){v=String(v==null?'':v).replace(',','.');var x=parseFloat(v);return isNaN(x)?0:x}
 function r(x){return Math.round((n(x)+0.0000001)*10)/10}
 function g(x){return r(x).toLocaleString('zh-Hant')+' g'}
+function activeAddons(){var names=flavorMap[flavor].items;return addons.filter(function(a){return names.indexOf(a.name)>=0})}
 function targetWeight(){return n(el('pieces').value)*n(el('pieceWeight').value)}
 function allRows(){return base.concat(activeAddons())}
 function pctTotal(){var s=0;var rows=allRows();for(var i=0;i<rows.length;i++)s+=n(rows[i].pct);return s}
 function flourTotal(){var denom=1+pctTotal()/100;return denom>0?targetWeight()/denom:0}
 
-function setVal(id,val){
-  var e=el(id);
-  if(e && document.activeElement!==e) {
-    e.value=r(val);
-  }
-}
+function setVal(id,val){ var e=el(id); if(e && document.activeElement!==e) { e.value=r(val); } }
 function setText(id,txt){var e=el(id);if(e)e.textContent=txt}
 
-// 監聽所有 input 聚焦時自動全選，方便手機修改
-function attachFocusEvent() {
-  document.querySelectorAll('input[type="number"]').forEach(input => {
-    input.addEventListener('focus', function() { this.select(); });
-  });
-}
-
-// 渲染手機版優化條狀卡片
-function render(){
+function renderBread(){
  var html='',i;
- // 麵粉
+ // 麵粉清單
  for(i=0;i<flourNames.length;i++) {
    html+=`<div class="item-row">
      <div class="item-header"><div class="item-name">${flourNames[i]}</div></div>
@@ -292,7 +454,7 @@ function render(){
  }
  el('flourList').innerHTML=html;
 
- // 基礎材料
+ // 基礎材料清單
  html='';
  for(i=0;i<base.length;i++) {
    html+=`<div class="item-row">
@@ -317,7 +479,7 @@ function render(){
  }
  el('baseList').innerHTML=html;
 
- // 口味投料
+ // 口味投料清單
  html='';
  var visible=activeAddons();
  for(i=0;i<visible.length;i++){
@@ -347,11 +509,10 @@ function render(){
  var empty=visible.length===0;
  el('addonList').style.display=empty?'none':'block';
  el('addonEmpty').style.display=empty?'block':'none';
- attachFocusEvent();
+ attachFocusEvents();
 }
 
-// 增減步進控制輔助函式 (專為手機按鈕打造)
-function stepId(id, val) { var e=el(id); e.value=Math.max(0, n(e.value)+val); calculate(); }
+function stepId(id, val) { var e=el(id); e.value=Math.max(0, n(e.value)+val); calculateBread(); }
 function stepWater(val) { var e=el('waterPct'); e.value=Math.max(0, r(n(e.value)+val)); editBasePct(0, e.value); }
 function stepFlourPct(i, val) { var e=el('fp'+i); editFlourPct(i, n(e.value)+val); }
 function stepFlourGram(i, val) { var e=el('fg'+i); editFlourGram(i, n(e.value)+val); }
@@ -360,14 +521,13 @@ function stepBaseGram(i, val) { var e=el('bg'+i); editBaseGram(i, n(e.value)+val
 function stepAddonPct(i, val) { var e=el('ap'+i); editAddonPct(i, n(e.value)+val); }
 function stepAddonGram(i, val) { var e=el('ag'+i); editAddonGram(i, n(e.value)+val); }
 
-function calcGrams(){var F=flourTotal();for(var i=0;i<base.length;i++)base[i].gram=F*n(base[i].pct)/100;for(i=0;i<addons.length;i++)addons[i].gram=0;var active=activeAddons();for(i=0;i<active.length;i++)active[i].gram=F*n(active[i].pct)/100}
+function calcGramsBread(){var F=flourTotal();for(var i=0;i<base.length;i++)base[i].gram=F*n(base[i].pct)/100;for(i=0;i<addons.length;i++)addons[i].gram=0;var active=activeAddons();for(i=0;i<active.length;i++)active[i].gram=F*n(active[i].pct)/100}
 
-function syncInputs(){
+function syncInputsBread(){
  var F=flourTotal(),i,add=0,baseg=0;
  for(i=0;i<base.length;i++)baseg+=n(base[i].gram);var active=activeAddons();for(i=0;i<active.length;i++)add+=n(active[i].gram);
- setText('targetDough',g(targetWeight()));setText('totalFlour',g(F));setText('waterGram',g(base[0].gram));setText('addonTotal',g(add));
+ setText('targetDough',g(targetWeight()));setText('totalFlourBread',g(F));setText('waterGram',g(base[0].gram));setText('addonTotal',g(add));
  
- // 底部看板更新
  el('checkLine').innerHTML='粉 '+g(F)+' ＋ 基材 '+g(baseg)+' ＋ 投料 '+g(add)+' ＝ <span class="ok">'+g(F+baseg+add)+'</span>';
  
  for(i=0;i<3;i++){setVal('fp'+i,flourPct[i]);setVal('fg'+i,F*flourPct[i]/100)}
@@ -378,8 +538,8 @@ function syncInputs(){
  el('flourCheck').innerHTML='<span class="ok">三種粉合計：'+r(flourPct[0]+flourPct[1]+flourPct[2])+'% ｜ 總粉量：'+g(F)+'</span>';
 }
 
-function calculate(){if(lock)return;lock=true;calcGrams();syncInputs();lock=false}
-function forceCalculate(){calculate();setTimeout(calculate,30)}
+function calculateBread(){if(lock)return;lock=true;calcGramsBread();syncInputsBread();lock=false}
+function forceCalculateBread(){calculateBread();setTimeout(calculateBread,30)}
 
 function fixFlours(changed){
  for(var i=0;i<3;i++){if(flourPct[i]<0)flourPct[i]=0;if(flourPct[i]>100)flourPct[i]=100}
@@ -395,10 +555,10 @@ function fixFlours(changed){
  var sum=flourPct[0]+flourPct[1]+flourPct[2];flourPct[0]+=100-sum;
 }
 
-function editFlourPct(i,v){if(lock)return;flourPct[i]=n(v);fixFlours(i);calculate()}
-function editFlourGram(i,v){var F=flourTotal();flourPct[i]=F>0?n(v)/F*100:0;fixFlours(i);calculate()}
-function editBasePct(i,v){base[i].pct=n(v);if(i===0)setVal('waterPct',base[i].pct);calculate()}
-function editAddonPct(i,v){addons[i].pct=n(v);calculate()}
+function editFlourPct(i,v){if(lock)return;flourPct[i]=n(v);fixFlours(i);calculateBread()}
+function editFlourGram(i,v){var F=flourTotal();flourPct[i]=F>0?n(v)/F*100:0;fixFlours(i);calculateBread()}
+function editBasePct(i,v){base[i].pct=n(v);if(i===0)setVal('waterPct',base[i].pct);calculateBread()}
+function editAddonPct(i,v){addons[i].pct=n(v);calculateBread()}
 
 function solveGram(row,gram){
  gram=n(gram);var T=targetWeight();if(gram<0)gram=0;if(gram>T)gram=T;
@@ -407,19 +567,24 @@ function solveGram(row,gram){
  for(i=0;i<rows.length;i++)if(rows[i]!==row)rows[i].gram=F*n(rows[i].pct)/100
 }
 
-function editBaseGram(i,v){solveGram(base[i],v);if(i===0)setVal('waterPct',base[i].pct);syncInputs()}
-function editAddonGram(i,v){solveGram(addons[i],v);syncInputs()}
-function changeFlavor(v){flavor=v; if(el('flavor'))el('flavor').value=v; render(); calculate()}
+function editBaseGram(i,v){solveGram(base[i],v);if(i===0)setVal('waterPct',base[i].pct);syncInputsBread()}
+function editAddonGram(i,v){solveGram(addons[i],v);syncInputsBread()}
+function changeFlavor(v){flavor=v; if(el('flavor'))el('flavor').value=v; renderBread(); calculateBread()}
 
-function resetAll(){
+function resetAllBread(){
  el('pieces').value=4;el('pieceWeight').value=400;el('waterPct').value=62.5;flourPct=[70,10,20];
  base[0].pct=62.5;base[1].pct=20;base[2].pct=1.8;base[3].pct=1.5;base[4].pct=1.5;
- var p=[4,4,5,8,12,6,15,12,6];for(var i=0;i<addons.length;i++)addons[i].pct=p[i];flavor='original';if(el('flavor'))el('flavor').value=flavor;render();calculate();
+ var p=[4,4,5,8,12,6,15,12,6];for(var i=0;i<addons.length;i++)addons[i].pct=p[i];flavor='original';if(el('flavor'))el('flavor').value=flavor;renderBread();calculateBread();
 }
 
-render();calculate();
-window.addEventListener('load',calculate);
-window.addEventListener('pageshow',calculate);
+// 頁面初始化
+window.addEventListener('DOMContentLoaded', function() {
+  // 初始化饅頭與麵包
+  clearResultsMantou();
+  renderBread();
+  calculateBread();
+  attachFocusEvents();
+});
 </script>
 </body>
 </html>
