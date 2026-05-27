@@ -3,44 +3,211 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
-<title>酸種麵包配方計算表｜口味投料分段版</title>
+<title>酸種麵包配方計算表｜終極手機優化版</title>
 <style>
-:root{--bg:#eef8f6;--card:#fff;--ink:#203536;--muted:#6d8081;--line:#d4e6e3;--main:#2f8f8b;--soft:#e5f6f4;--warn:#b65b34;--ok:#21745f}*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}body{margin:0;background:linear-gradient(145deg,#edf8f6,#fbfff9);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Noto Sans TC","Microsoft JhengHei",Arial,sans-serif;line-height:1.55}.wrap{max-width:1120px;margin:auto;padding:14px 10px 48px}header,.card{background:rgba(255,255,255,.97);border:1px solid var(--line);border-radius:18px;box-shadow:0 8px 22px rgba(30,100,90,.08);margin-bottom:14px;padding:16px}h1{font-size:24px;margin:0 0 6px}h2{font-size:19px;margin:0 0 12px}.note{color:var(--muted);font-size:14px}.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.field label{display:block;font-size:14px;color:var(--muted);margin-bottom:5px}select,input{width:100%;min-height:46px;border:1px solid var(--line);border-radius:13px;background:#fff;color:var(--ink);font-size:17px;padding:8px 10px}select:focus,input:focus{outline:3px solid var(--soft);border-color:var(--main)}input::-webkit-inner-spin-button,input::-webkit-outer-spin-button{-webkit-appearance:none;margin:0}.metric{border:1px solid var(--line);border-radius:15px;background:#fafffe;padding:12px}.metric .k{font-size:13px;color:var(--muted)}.metric .v{font-weight:800;font-size:22px;color:var(--ok)}table{width:100%;border-collapse:separate;border-spacing:0 8px}th{text-align:left;color:#335f5d;font-size:13px;padding:0 7px;white-space:nowrap}td{background:#fff;border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:7px;vertical-align:middle}td:first-child{border-left:1px solid var(--line);border-radius:12px 0 0 12px;font-weight:700}td:last-child{border-right:1px solid var(--line);border-radius:0 12px 12px 0}.num{max-width:120px;display:inline-block}.unit{color:var(--muted);font-size:14px;margin-left:3px}.actions{position:sticky;bottom:8px;display:flex;gap:8px;flex-wrap:wrap;background:rgba(255,255,255,.9);border:1px solid var(--line);border-radius:18px;padding:8px;backdrop-filter:blur(8px);z-index:10}button{border:0;border-radius:999px;background:var(--main);color:#fff;font-weight:800;font-size:16px;padding:12px 16px;min-height:46px}button.secondary{background:#73aaa6}.ok{color:var(--ok);font-weight:800}.warn{color:var(--warn);font-weight:800}.muted{font-size:13px;color:var(--muted)}@media(max-width:760px){.wrap{padding:10px 8px 42px}header,.card{padding:14px;border-radius:16px}h1{font-size:22px}.grid,.grid3{grid-template-columns:1fr}table{display:block;overflow-x:auto;white-space:nowrap}.num{max-width:105px}.actions button{flex:1;min-width:130px}}
+:root {
+  --bg: #f4f9f8;
+  --card: #ffffff;
+  --ink: #1e2d2d;
+  --muted: #647c7a;
+  --line: #dbeae7;
+  --main: #257a76;
+  --main-light: #e6f4f2;
+  --warn: #c35126;
+  --ok: #1b6351;
+  --shadow: 0 4px 14px rgba(37,122,118,0.06);
+}
+* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans TC", sans-serif;
+  line-height: 1.5;
+  padding-bottom: 120px; /* 留空間給底部固定看板 */
+}
+.wrap { max-width: 600px; margin: auto; padding: 12px 12px 40px; }
+header { text-align: center; padding: 16px 8px; }
+h1 { font-size: 22px; margin: 0 0 6px; color: var(--main); font-weight: 800; }
+h2 { font-size: 17px; margin: 0 0 12px; display: flex; align-items: center; gap: 6px; color: var(--main); }
+h2::before { content: "◆"; font-size: 12px; color: var(--main); }
+.note { color: var(--muted); font-size: 13px; line-height: 1.4; margin: 4px 0; }
+
+.card {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  box-shadow: var(--shadow);
+  margin-bottom: 14px;
+  padding: 16px;
+}
+
+/* 表單與欄位 */
+.field { margin-bottom: 12px; }
+.field label { display: block; font-size: 13px; color: var(--muted); margin-bottom: 6px; font-weight: 500; }
+select, input {
+  width: 100%;
+  height: 46px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: #fff;
+  color: var(--ink);
+  font-size: 16px;
+  padding: 8px 12px;
+  text-align: center;
+}
+select { text-align-last: center; font-weight: bold; border-color: var(--main); background-color: var(--main-light); }
+input:focus, select:focus { outline: 3px solid var(--main-light); border-color: var(--main); }
+input::-webkit-inner-spin-button, input::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
+
+/* 頂部/功能按鈕 */
+.btn-group { display: flex; gap: 8px; margin-top: 10px; }
+button {
+  flex: 1;
+  border: 0;
+  border-radius: 10px;
+  background: var(--main);
+  color: #fff;
+  font-weight: bold;
+  font-size: 15px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+button.secondary { background: var(--muted); }
+
+/* 精簡看板 */
+.summary-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; margin-bottom: 8px; }
+.metric { border: 1px solid var(--line); border-radius: 10px; background: #fff; padding: 10px; text-align: center; }
+.metric .k { font-size: 12px; color: var(--muted); margin-bottom: 2px; }
+.metric .v { font-weight: 800; font-size: 18px; color: var(--ok); }
+
+/* 手機版條狀清單 (取代傳統Table) */
+.item-row {
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 12px;
+  margin-bottom: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.item-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px dashed var(--line); padding-bottom: 6px; }
+.item-name { font-weight: bold; font-size: 15px; color: var(--ink); }
+.item-inputs { display: flex; gap: 10px; }
+.input-block { flex: 1; display: flex; flex-direction: column; gap: 4px; }
+.input-block span { font-size: 11px; color: var(--muted); text-align: center; }
+
+/* 步進微調按鈕控制項 */
+.stepper { display: flex; align-items: center; border: 1px solid var(--line); border-radius: 8px; overflow: hidden; background: #fff; }
+.stepper button { width: 32px; height: 36px; background: var(--main-light); color: var(--main); font-size: 18px; border-radius: 0; font-weight: normal; }
+.stepper button:active { background: var(--line); }
+.stepper input { flex: 1; height: 36px; border: 0; padding: 0; font-size: 15px; font-weight: bold; }
+
+/* 底部固定看板 */
+.sticky-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(255, 255, 255, 0.96);
+  border-top: 1px solid var(--line);
+  padding: 10px 14px cubic-bezier(0.1, 0.7, 0.1, 1);
+  box-shadow: 0 -4px 20px rgba(0,0,0,0.07);
+  backdrop-filter: blur(10px);
+  z-index: 999;
+}
+.sticky-content { max-width: 600px; margin: auto; font-size: 13px; font-weight: 500; text-align: center; }
+
+.ok { color: var(--ok); font-weight: bold; }
+.warn { color: var(--warn); font-weight: bold; }
 </style>
 </head>
 <body>
+
 <div class="wrap">
-<header><h1>酸種麵包配方計算表｜口味投料分段版</h1><div class="note">以最後麵團「含料總重」分割，預設每顆 400g。所有欄位可改，改克數會回推百分比。</div></header>
+  <header>
+    <h1>酸種麵包配方計算表</h1>
+    <div class="note">手機友善版 📱 免打字 · 點擊 ± 可微調克數或比例</div>
+  </header>
 
-<section class="card">
-<h2>一、製作數量</h2>
-<div class="grid3">
-<div class="field"><label>製作顆數</label><input id="pieces" type="number" inputmode="decimal" value="4" min="1" step="1" oninput="calculate()" onchange="calculate()"></div>
-<div class="field"><label>每顆最後麵團重量 g</label><input id="pieceWeight" type="number" inputmode="decimal" value="400" min="1" step="1" oninput="calculate()" onchange="calculate()"></div>
-<div class="field"><label>預水合水量 %</label><input id="waterPct" type="number" inputmode="decimal" value="62.5" min="0" step="0.1" oninput="editBasePct(0,this.value)" onchange="editBasePct(0,this.value)"></div>
+  <section class="card">
+    <h2>製作設定</h2>
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+      <div class="field">
+        <label>製作顆數</label>
+        <div class="stepper">
+          <button type="button" onclick="stepId('pieces', -1)">-</button>
+          <input id="pieces" type="number" inputmode="decimal" value="4" min="1" step="1" oninput="calculate()">
+          <button type="button" onclick="stepId('pieces', 1)">+</button>
+        </div>
+      </div>
+      <div class="field">
+        <label>每顆麵團重 (g)</label>
+        <div class="stepper">
+          <button type="button" onclick="stepId('pieceWeight', -10)">-</button>
+          <input id="pieceWeight" type="number" inputmode="decimal" value="400" min="1" step="5" oninput="calculate()">
+          <button type="button" onclick="stepId('pieceWeight', 10)">+</button>
+        </div>
+      </div>
+    </div>
+    <div class="field">
+      <label>預水合水量 (%)</label>
+      <div class="stepper">
+        <button type="button" onclick="stepWater(-0.5)">-</button>
+        <input id="waterPct" type="number" inputmode="decimal" value="62.5" min="0" step="0.1" oninput="editBasePct(0,this.value)">
+        <button type="button" onclick="stepWater(0.5)">+</button>
+      </div>
+    </div>
+    <div class="btn-group">
+      <button type="button" onclick="forceCalculate()">重新計算</button>
+      <button type="button" class="secondary" onclick="resetAll()">恢復預設</button>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>數據總覽</h2>
+    <div class="summary-grid">
+      <div class="metric"><div class="k">最後總重</div><div class="v" id="targetDough">—</div></div>
+      <div class="metric"><div class="k">麵粉總量</div><div class="v" id="totalFlour">—</div></div>
+      <div class="metric"><div class="k">預水合水重</div><div class="v" id="waterGram">—</div></div>
+      <div class="metric"><div class="k">投料總重</div><div class="v" id="addonTotal">—</div></div>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>三、麵粉比例 (合計固定 100%)</h2>
+    <div id="flourCheck" class="note" style="margin-bottom: 10px;"></div>
+    <div id="flourList"></div>
+  </section>
+
+  <section class="card">
+    <h2>四、基礎材料</h2>
+    <div id="baseList"></div>
+  </section>
+
+  <section class="card">
+    <h2>五、口味投料控制</h2>
+    <div class="field">
+      <label>選擇麵包口味</label>
+      <select id="flavor" onchange="changeFlavor(this.value)">
+        <option value="original">原味麵包</option>
+        <option value="chiliCheese">辣椒起司</option>
+        <option value="cocoaCranberry">可可蔓越莓</option>
+        <option value="multigrainSeeds">多穀物種子</option>
+      </select>
+    </div>
+    <p class="note" id="flavorNote" style="background: var(--bg); padding: 8px; border-radius: 8px;"></p>
+    <div id="addonEmpty" class="metric" style="display:none; background: var(--main-light);"><div class="v" style="font-size:15px;">原味，無額外投料</div></div>
+    <div id="addonList"></div>
+  </section>
 </div>
-<div class="actions"><button type="button" onclick="forceCalculate()">重新計算</button><button type="button" class="secondary" onclick="resetAll()">恢復預設</button></div>
-<div class="note">這版不靠單一事件：欄位 oninput 會算，按鈕 onclick 也會算。手機 Safari／平板瀏覽器可直接使用。</div>
-</section>
 
-<section class="card"><h2>二、總量反推</h2><div class="grid">
-<div class="metric"><div class="k">最後麵團總重</div><div class="v" id="targetDough">—</div></div>
-<div class="metric"><div class="k">反推麵粉總量</div><div class="v" id="totalFlour">—</div></div>
-<div class="metric"><div class="k">預水合水量 62.5%</div><div class="v" id="waterGram">—</div></div>
-<div class="metric"><div class="k">投料總重</div><div class="v" id="addonTotal">—</div></div>
-</div><p class="note" id="checkLine"></p></section>
-
-<section class="card"><h2>三、麵粉比例</h2><p class="note">規則：三種粉合計固定 100%。例如法國麵粉改為 0%，會直接補回高筋麵粉，所以高筋變 80%（若裸麥仍 20%）。</p>
-<table><thead><tr><th>粉類</th><th>比例</th><th>克數</th></tr></thead><tbody id="flourBody"></tbody></table><div id="flourCheck" class="note"></div></section>
-
-<section class="card"><h2>四、基礎材料</h2><table><thead><tr><th>項目</th><th>百分比</th><th>克數</th></tr></thead><tbody id="baseBody"></tbody></table></section>
-
-<section class="card"><h2>五、口味投料欄位</h2>
-<p class="note">先選擇酸種口味，系統會再帶出該口味的投料細項；原味不帶投料。</p>
-<div class="field" style="max-width:420px;margin-bottom:12px"><label>酸種口味</label><select id="flavor" onchange="changeFlavor(this.value)" oninput="changeFlavor(this.value)"><option value="original">原味</option><option value="chiliCheese">辣椒起司</option><option value="cocoaCranberry">可可蔓越莓</option><option value="multigrainSeeds">多穀物種子</option></select></div>
-<p class="note" id="flavorNote">依酸種口味自動帶出投料欄位；只計算目前口味顯示的投料。可直接改克數，系統會回推百分比，並維持最後麵團含料總重。</p>
-<div id="addonEmpty" class="metric" style="display:none"><div class="k">目前口味</div><div class="v">原味，不加入投料</div></div>
-<table id="addonTable"><thead><tr><th>投料</th><th>百分比</th><th>克數</th><th>備註</th></tr></thead><tbody id="addonBody"></tbody></table></section>
+<div class="sticky-bar">
+  <div class="sticky-content" id="checkLine">計算中...</div>
 </div>
 
 <script>
@@ -67,10 +234,11 @@ var addons=[
 var flavor='original';
 var flavorMap={
  original:{label:'原味',items:[],note:'原味：不帶出投料欄位，只計算基礎麵團。'},
- chiliCheese:{label:'辣椒起司',items:['切達起司','剝皮辣椒','墨西哥辣椒'],note:'辣椒起司：投料帶出切達起司、剝皮辣椒、墨西哥辣椒。'},
- cocoaCranberry:{label:'可可蔓越莓',items:['減糖蔓越莓乾','無糖可可粉'],note:'可可蔓越莓口味：投料帶出減糖蔓越莓乾、無糖可可粉。'},
- multigrainSeeds:{label:'多穀物種子',items:['黑芝麻','白芝麻','黃金亞麻子','南瓜子'],note:'多穀物種子口味：投料帶出黑芝麻、白芝麻、黃金亞麻子、南瓜子。'}
+ chiliCheese:{label:'辣椒起司',items:['切達起司','剝皮辣椒','墨西哥辣椒'],note:'帶出：切達起司、剝皮辣椒、墨西哥辣椒。'},
+ cocoaCranberry:{label:'可可蔓越莓',items:['減糖蔓越莓乾','無糖可可粉'],note:'帶出：減糖蔓越莓乾、無糖可可粉。'},
+ multigrainSeeds:{label:'多穀物種子',items:['黑芝麻','白芝麻','黃金亞麻子','南瓜子'],note:'帶出：黑芝麻、白芝麻、黃金亞麻子、南瓜子。'}
 };
+
 function activeAddons(){var names=flavorMap[flavor].items;return addons.filter(function(a){return names.indexOf(a.name)>=0})}
 var lock=false;
 function el(id){return document.getElementById(id)}
@@ -81,38 +249,138 @@ function targetWeight(){return n(el('pieces').value)*n(el('pieceWeight').value)}
 function allRows(){return base.concat(activeAddons())}
 function pctTotal(){var s=0;var rows=allRows();for(var i=0;i<rows.length;i++)s+=n(rows[i].pct);return s}
 function flourTotal(){var denom=1+pctTotal()/100;return denom>0?targetWeight()/denom:0}
-function setVal(id,val){var e=el(id);if(e && document.activeElement!==e)e.value=r(val)}
+
+function setVal(id,val){
+  var e=el(id);
+  if(e && document.activeElement!==e) {
+    e.value=r(val);
+  }
+}
 function setText(id,txt){var e=el(id);if(e)e.textContent=txt}
+
+// 監聽所有 input 聚焦時自動全選，方便手機修改
+function attachFocusEvent() {
+  document.querySelectorAll('input[type="number"]').forEach(input => {
+    input.addEventListener('focus', function() { this.select(); });
+  });
+}
+
+// 渲染手機版優化條狀卡片
 function render(){
  var html='',i;
- for(i=0;i<flourNames.length;i++) html+='<tr><td>'+flourNames[i]+'</td><td><input id="fp'+i+'" class="num" type="number" inputmode="decimal" min="0" step="0.1" value="'+r(flourPct[i])+'" oninput="editFlourPct('+i+',this.value)" onchange="editFlourPct('+i+',this.value)"><span class="unit">%</span></td><td><input id="fg'+i+'" class="num" type="number" inputmode="decimal" min="0" step="0.1" oninput="editFlourGram('+i+',this.value)" onchange="editFlourGram('+i+',this.value)"><span class="unit">g</span></td></tr>';
- el('flourBody').innerHTML=html;
+ // 麵粉
+ for(i=0;i<flourNames.length;i++) {
+   html+=`<div class="item-row">
+     <div class="item-header"><div class="item-name">${flourNames[i]}</div></div>
+     <div class="item-inputs">
+       <div class="input-block"><span>比例 (%)</span>
+         <div class="stepper">
+           <button type="button" onclick="stepFlourPct(${i},-1)">-</button>
+           <input id="fp${i}" type="number" inputmode="decimal" oninput="editFlourPct(${i},this.value)">
+           <button type="button" onclick="stepFlourPct(${i},1)">+</button>
+         </div>
+       </div>
+       <div class="input-block"><span>克數 (g)</span>
+         <div class="stepper">
+           <button type="button" onclick="stepFlourGram(${i},-5)">-</button>
+           <input id="fg${i}" type="number" inputmode="decimal" oninput="editFlourGram(${i},this.value)">
+           <button type="button" onclick="stepFlourGram(${i},5)">+</button>
+         </div>
+       </div>
+     </div>
+   </div>`;
+ }
+ el('flourList').innerHTML=html;
+
+ // 基礎材料
  html='';
- for(i=0;i<base.length;i++) html+='<tr><td>'+base[i].name+'</td><td><input id="bp'+i+'" class="num" type="number" inputmode="decimal" min="0" step="0.1" oninput="editBasePct('+i+',this.value)" onchange="editBasePct('+i+',this.value)"><span class="unit">%</span></td><td><input id="bg'+i+'" class="num" type="number" inputmode="decimal" min="0" step="0.1" oninput="editBaseGram('+i+',this.value)" onchange="editBaseGram('+i+',this.value)"><span class="unit">g</span></td></tr>';
- el('baseBody').innerHTML=html;
+ for(i=0;i<base.length;i++) {
+   html+=`<div class="item-row">
+     <div class="item-header"><div class="item-name">${base[i].name}</div></div>
+     <div class="item-inputs">
+       <div class="input-block"><span>比例 (%)</span>
+         <div class="stepper">
+           <button type="button" onclick="stepBasePct(${i},-0.1)">-</button>
+           <input id="bp${i}" type="number" inputmode="decimal" oninput="editBasePct(${i},this.value)">
+           <button type="button" onclick="stepBasePct(${i},0.1)">+</button>
+         </div>
+       </div>
+       <div class="input-block"><span>克數 (g)</span>
+         <div class="stepper">
+           <button type="button" onclick="stepBaseGram(${i},-5)">-</button>
+           <input id="bg${i}" type="number" inputmode="decimal" oninput="editBaseGram(${i},this.value)">
+           <button type="button" onclick="stepBaseGram(${i},5)">+</button>
+         </div>
+       </div>
+     </div>
+   </div>`;
+ }
+ el('baseList').innerHTML=html;
+
+ // 口味投料
  html='';
  var visible=activeAddons();
- for(i=0;i<visible.length;i++){var idx=addons.indexOf(visible[i]); html+='<tr><td>'+visible[i].name+'</td><td><input id="ap'+idx+'" class="num" type="number" inputmode="decimal" min="0" step="0.1" oninput="editAddonPct('+idx+',this.value)" onchange="editAddonPct('+idx+',this.value)"><span class="unit">%</span></td><td><input id="ag'+idx+'" class="num" type="number" inputmode="decimal" min="0" step="0.1" oninput="editAddonGram('+idx+',this.value)" onchange="editAddonGram('+idx+',this.value)"><span class="unit">g</span></td><td class="muted">'+visible[i].note+'</td></tr>';}
- el('addonBody').innerHTML=html;
+ for(i=0;i<visible.length;i++){
+   var idx=addons.indexOf(visible[i]);
+   html+=`<div class="item-row">
+     <div class="item-header"><div class="item-name">${visible[i].name}</div><div class="note">${visible[i].note}</div></div>
+     <div class="item-inputs">
+       <div class="input-block"><span>比例 (%)</span>
+         <div class="stepper">
+           <button type="button" onclick="stepAddonPct(${idx},-0.5)">-</button>
+           <input id="ap${idx}" type="number" inputmode="decimal" oninput="editAddonPct(${idx},this.value)">
+           <button type="button" onclick="stepAddonPct(${idx},0.5)">+</button>
+         </div>
+       </div>
+       <div class="input-block"><span>克數 (g)</span>
+         <div class="stepper">
+           <button type="button" onclick="stepAddonGram(${idx},-5)">-</button>
+           <input id="ag${idx}" type="number" inputmode="decimal" oninput="editAddonGram(${idx},this.value)">
+           <button type="button" onclick="stepAddonGram(${idx},5)">+</button>
+         </div>
+       </div>
+     </div>
+   </div>`;
+ }
+ el('addonList').innerHTML=html;
+ 
  var empty=visible.length===0;
- if(el('addonTable')) el('addonTable').style.display=empty?'none':'table';
- if(el('addonEmpty')) el('addonEmpty').style.display=empty?'block':'none';
+ el('addonList').style.display=empty?'none':'block';
+ el('addonEmpty').style.display=empty?'block':'none';
+ attachFocusEvent();
 }
+
+// 增減步進控制輔助函式 (專為手機按鈕打造)
+function stepId(id, val) { var e=el(id); e.value=Math.max(0, n(e.value)+val); calculate(); }
+function stepWater(val) { var e=el('waterPct'); e.value=Math.max(0, r(n(e.value)+val)); editBasePct(0, e.value); }
+function stepFlourPct(i, val) { var e=el('fp'+i); editFlourPct(i, n(e.value)+val); }
+function stepFlourGram(i, val) { var e=el('fg'+i); editFlourGram(i, n(e.value)+val); }
+function stepBasePct(i, val) { var e=el('bp'+i); editBasePct(i, n(e.value)+val); }
+function stepBaseGram(i, val) { var e=el('bg'+i); editBaseGram(i, n(e.value)+val); }
+function stepAddonPct(i, val) { var e=el('ap'+i); editAddonPct(i, n(e.value)+val); }
+function stepAddonGram(i, val) { var e=el('ag'+i); editAddonGram(i, n(e.value)+val); }
+
 function calcGrams(){var F=flourTotal();for(var i=0;i<base.length;i++)base[i].gram=F*n(base[i].pct)/100;for(i=0;i<addons.length;i++)addons[i].gram=0;var active=activeAddons();for(i=0;i<active.length;i++)active[i].gram=F*n(active[i].pct)/100}
+
 function syncInputs(){
  var F=flourTotal(),i,add=0,baseg=0;
  for(i=0;i<base.length;i++)baseg+=n(base[i].gram);var active=activeAddons();for(i=0;i<active.length;i++)add+=n(active[i].gram);
  setText('targetDough',g(targetWeight()));setText('totalFlour',g(F));setText('waterGram',g(base[0].gram));setText('addonTotal',g(add));
- el('checkLine').innerHTML='目前：麵粉 '+g(F)+' ＋ 基礎材料 '+g(baseg)+' ＋ 投料 '+g(add)+' ＝ <span class="ok">'+g(F+baseg+add)+'</span>';
+ 
+ // 底部看板更新
+ el('checkLine').innerHTML='粉 '+g(F)+' ＋ 基材 '+g(baseg)+' ＋ 投料 '+g(add)+' ＝ <span class="ok">'+g(F+baseg+add)+'</span>';
+ 
  for(i=0;i<3;i++){setVal('fp'+i,flourPct[i]);setVal('fg'+i,F*flourPct[i]/100)}
  for(i=0;i<base.length;i++){setVal('bp'+i,base[i].pct);setVal('bg'+i,base[i].gram)}
  for(i=0;i<active.length;i++){var idx=addons.indexOf(active[i]);setVal('ap'+idx,active[i].pct);setVal('ag'+idx,active[i].gram)}
- el('flavorNote').textContent=flavorMap[flavor].note+' 只計算目前顯示的投料。';
+ el('flavorNote').textContent=flavorMap[flavor].note;
  setVal('waterPct',base[0].pct);
- el('flourCheck').innerHTML='<span class="ok">三種粉合計：'+r(flourPct[0]+flourPct[1]+flourPct[2])+'%｜'+g(F)+'</span>';
+ el('flourCheck').innerHTML='<span class="ok">三種粉合計：'+r(flourPct[0]+flourPct[1]+flourPct[2])+'% ｜ 總粉量：'+g(F)+'</span>';
 }
+
 function calculate(){if(lock)return;lock=true;calcGrams();syncInputs();lock=false}
 function forceCalculate(){calculate();setTimeout(calculate,30)}
+
 function fixFlours(changed){
  for(var i=0;i<3;i++){if(flourPct[i]<0)flourPct[i]=0;if(flourPct[i]>100)flourPct[i]=100}
  if(changed===0){
@@ -126,19 +394,29 @@ function fixFlours(changed){
  }
  var sum=flourPct[0]+flourPct[1]+flourPct[2];flourPct[0]+=100-sum;
 }
+
 function editFlourPct(i,v){if(lock)return;flourPct[i]=n(v);fixFlours(i);calculate()}
 function editFlourGram(i,v){var F=flourTotal();flourPct[i]=F>0?n(v)/F*100:0;fixFlours(i);calculate()}
-function editBasePct(i,v){base[i].pct=n(v);if(i===0)el('waterPct').value=r(base[i].pct);calculate()}
+function editBasePct(i,v){base[i].pct=n(v);if(i===0)setVal('waterPct',base[i].pct);calculate()}
 function editAddonPct(i,v){addons[i].pct=n(v);calculate()}
-function solveGram(row,gram){gram=n(gram);var T=targetWeight();if(gram<0)gram=0;if(gram>T)gram=T;var rows=allRows(),otherPct=0;for(var i=0;i<rows.length;i++)if(rows[i]!==row)otherPct+=n(rows[i].pct);var F=(T-gram)/(1+otherPct/100);row.gram=gram;row.pct=F>0?gram/F*100:0;for(i=0;i<rows.length;i++)if(rows[i]!==row)rows[i].gram=F*n(rows[i].pct)/100}
-function editBaseGram(i,v){solveGram(base[i],v);if(i===0)el('waterPct').value=r(base[i].pct);syncInputs()}
+
+function solveGram(row,gram){
+ gram=n(gram);var T=targetWeight();if(gram<0)gram=0;if(gram>T)gram=T;
+ var rows=allRows(),otherPct=0;for(var i=0;i<rows.length;i++)if(rows[i]!==row)otherPct+=n(rows[i].pct);
+ var F=(T-gram)/(1+otherPct/100);row.gram=gram;row.pct=F>0?gram/F*100:0;
+ for(i=0;i<rows.length;i++)if(rows[i]!==row)rows[i].gram=F*n(rows[i].pct)/100
+}
+
+function editBaseGram(i,v){solveGram(base[i],v);if(i===0)setVal('waterPct',base[i].pct);syncInputs()}
 function editAddonGram(i,v){solveGram(addons[i],v);syncInputs()}
 function changeFlavor(v){flavor=v; if(el('flavor'))el('flavor').value=v; render(); calculate()}
+
 function resetAll(){
  el('pieces').value=4;el('pieceWeight').value=400;el('waterPct').value=62.5;flourPct=[70,10,20];
  base[0].pct=62.5;base[1].pct=20;base[2].pct=1.8;base[3].pct=1.5;base[4].pct=1.5;
  var p=[4,4,5,8,12,6,15,12,6];for(var i=0;i<addons.length;i++)addons[i].pct=p[i];flavor='original';if(el('flavor'))el('flavor').value=flavor;render();calculate();
 }
+
 render();calculate();
 window.addEventListener('load',calculate);
 window.addEventListener('pageshow',calculate);
